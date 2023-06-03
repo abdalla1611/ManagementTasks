@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ManagementTasks.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManagementTasks.Controllers
@@ -11,27 +10,29 @@ namespace ManagementTasks.Controllers
     [Route("api/[controller]")]
     public class TodoController : ControllerBase
     {
-        private static List<Todo> todos = new List<Todo>{
-            new Todo(),
-            new Todo {Id = 1}
-        };
+        private readonly ITodoService _TodoService;
+        public TodoController(ITodoService todoService)
+        {
+            this._TodoService = todoService;
+
+        }
+
 
         [HttpGet("GetAll")]
         public ActionResult<List<Todo>> Get()
         {
-            return Ok(todos);
+            return Ok(this._TodoService.GetAll());
         }
         [HttpGet("{Id}")]
         public ActionResult<Todo> GetSingle(int Id)
         {
-            return Ok(todos.FirstOrDefault(t => t.Id == Id));
+            return Ok(this._TodoService.GetById(Id));
         }
 
         [HttpPost("")]
         public ActionResult<List<Todo>> AddTodo(Todo newTodo)
         {
-            todos.Add(newTodo);
-            return Ok(todos);
+            return Ok(this._TodoService.AddTodo(newTodo));
         }
     }
 }
