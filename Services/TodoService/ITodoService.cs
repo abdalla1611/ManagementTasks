@@ -8,9 +8,9 @@ namespace ManagementTasks.Services.TodoService
 {
     public interface ITodoService
     {
-        List<Todo> GetAll();
-        Todo GetById(int id);
+        Task<ServiceResponse<List<Todo>>> GetAll();
+        Task<ServiceResponse<Todo>> GetById(int id);
 
-        List<Todo> AddTodo(Todo newTodo);
+        Task<ServiceResponse<List<Todo>>> AddTodo(Todo newTodo);
     }
 }

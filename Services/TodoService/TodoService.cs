@@ -8,29 +8,35 @@ namespace ManagementTasks.Services.TodoService
 {
     public class TodoService : ITodoService
     {
+
         private static List<Todo> todos = new List<Todo>{
             new Todo(),
             new Todo {Id = 1}
         };
-        public List<Todo> AddTodo(Todo newTodo)
+
+
+        public async Task<ServiceResponse<List<Todo>>> AddTodo(Todo newTodo)
         {
+            var response = new ServiceResponse<List<Todo>>();
             todos.Add(newTodo);
-            return todos;
+            response.data = todos;
+            return response;
         }
 
-        public List<Todo> GetAll()
+        public async Task<ServiceResponse<List<Todo>>> GetAll()
         {
-            return todos;
+            var response = new ServiceResponse<List<Todo>>();
+            response.data = todos;
+            return response;
         }
 
-        public Todo GetById(int id)
+        public async Task<ServiceResponse<Todo>> GetById(int id)
         {
+            var response = new ServiceResponse<Todo>();
             var todo = todos.FirstOrDefault(t => t.Id == id);
-            if (todo is not null)
-            {
-                return todo;
-            }
-            throw new Exception("task not found");
+            response.data = todo;
+            return response;
         }
     }
 }
+
