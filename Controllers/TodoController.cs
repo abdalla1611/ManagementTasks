@@ -18,18 +18,18 @@ namespace ManagementTasks.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<Todo>>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<GetTodoDto>>>> Get()
         {
             return Ok(await this._TodoService.GetAll());
         }
         [HttpGet("{Id}")]
-        public async Task<ActionResult<ServiceResponse<Todo>>> GetSingle(int Id)
+        public async Task<ActionResult<ServiceResponse<GetTodoDto>>> GetSingle(int Id)
         {
             return Ok(await this._TodoService.GetById(Id));
         }
 
         [HttpPost("")]
-        public async Task<ActionResult<ServiceResponse<List<Todo>>>> AddTodo(Todo newTodo)
+        public async Task<ActionResult<ServiceResponse<List<GetTodoDto>>>> AddTodo(addTodoDto newTodo)
         {
             return Ok(await this._TodoService.AddTodo(newTodo));
         }

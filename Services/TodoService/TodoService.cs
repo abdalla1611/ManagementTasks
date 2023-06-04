@@ -13,28 +13,36 @@ namespace ManagementTasks.Services.TodoService
             new Todo(),
             new Todo {Id = 1}
         };
+        private readonly IMapper mapper;
 
-
-        public async Task<ServiceResponse<List<Todo>>> AddTodo(Todo newTodo)
+        public TodoService(IMapper mapper)
         {
-            var response = new ServiceResponse<List<Todo>>();
-            todos.Add(newTodo);
-            response.data = todos;
+            this.mapper = mapper;
+
+        }
+
+        public async Task<ServiceResponse<List<GetTodoDto>>> AddTodo(addTodoDto newTodo)
+        {
+            var response = new ServiceResponse<List<GetTodoDto>>();
+            var t = mapper.Map<Todo>(newTodo);
+            t.Id = todos.Max(t => t.Id) + 1;
+            todos.Add(t);
+            response.data = todos.Select(t => mapper.Map<GetTodoDto>(t)).ToList();
             return response;
         }
 
-        public async Task<ServiceResponse<List<Todo>>> GetAll()
+        public async Task<ServiceResponse<List<GetTodoDto>>> GetAll()
         {
-            var response = new ServiceResponse<List<Todo>>();
-            response.data = todos;
+            var response = new ServiceResponse<List<GetTodoDto>>();
+            response.data = todos.Select(t => mapper.Map<GetTodoDto>(t)).ToList();
             return response;
         }
 
-        public async Task<ServiceResponse<Todo>> GetById(int id)
+        public async Task<ServiceResponse<GetTodoDto>> GetById(int id)
         {
-            var response = new ServiceResponse<Todo>();
+            var response = new ServiceResponse<GetTodoDto>();
             var todo = todos.FirstOrDefault(t => t.Id == id);
-            response.data = todo;
+            response.data = mapper.Map<GetTodoDto>(todo);
             return response;
         }
     }
