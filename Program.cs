@@ -2,10 +2,14 @@ global using ManagementTasks.Services.TodoService;
 global using ManagementTasks.Models;
 global using ManagementTasks.Dtos;
 global using AutoMapper;
+global using Microsoft.EntityFrameworkCore;
+global using ManagementTasks.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<DataContext>(op =>
+    op.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

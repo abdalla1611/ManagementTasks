@@ -13,9 +13,11 @@ namespace ManagementTasks.Services.TodoService
             new Todo {Id = 1}
         };
         private readonly IMapper mapper;
+        private readonly DataContext context;
 
-        public TodoService(IMapper mapper)
+        public TodoService(IMapper mapper, DataContext context)
         {
+            this.context = context;
             this.mapper = mapper;
 
         }
@@ -54,7 +56,8 @@ namespace ManagementTasks.Services.TodoService
         public async Task<ServiceResponse<List<GetTodoDto>>> GetAllTodos()
         {
             var response = new ServiceResponse<List<GetTodoDto>>();
-            response.data = todos.Select(t => mapper.Map<GetTodoDto>(t)).ToList();
+            var dbTodos = await context.Todos.ToListAsync();
+            response.data = dbTodos.Select(t => mapper.Map<GetTodoDto>(t)).ToList();
             return response;
         }
 
