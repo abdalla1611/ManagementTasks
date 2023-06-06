@@ -7,7 +7,7 @@ namespace ManagementTasks.Dtos
 {
     public class UpdateTodoDto
     {
-        public int Id { get; set; } = 0;
+        public int Id { get; set; }
         public string Title { get; set; } = "task title";
         public string description { get; set; } = "task description";
         public DateTime DueDate { get; set; } = new DateTime(1998, 11, 16);

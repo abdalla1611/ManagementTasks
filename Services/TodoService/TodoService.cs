@@ -8,10 +8,6 @@ namespace ManagementTasks.Services.TodoService
 {
     public class TodoService : ITodoService
     {
-        private static List<Todo> todos = new List<Todo>{
-            new Todo(),
-            new Todo {Id = 1}
-        };
         private readonly IMapper mapper;
         private readonly DataContext context;
 
@@ -26,9 +22,9 @@ namespace ManagementTasks.Services.TodoService
         {
             var response = new ServiceResponse<List<GetTodoDto>>();
             var t = mapper.Map<Todo>(newTodo);
-            t.Id = todos.Max(t => t.Id) + 1;
-            todos.Add(t);
-            response.data = todos.Select(t => mapper.Map<GetTodoDto>(t)).ToList();
+            context.Todos.Add(t);
+            await context.SaveChangesAsync();
+            response.data = await context.Todos.Select(t => mapper.Map<GetTodoDto>(t)).ToListAsync();
             return response;
         }
 
@@ -37,13 +33,15 @@ namespace ManagementTasks.Services.TodoService
             var response = new ServiceResponse<List<GetTodoDto>>();
             try
             {
-                var todo = todos.FirstOrDefault(t => t.Id == id);
+                var todo = await context.Todos.FirstOrDefaultAsync(t => t.Id == id);
+                Console.WriteLine(todo);
                 if (todo is null)
                 {
                     throw new Exception($"todo with id '{id}' not found");
                 }
-                todos.Remove(todo);
-                response.data = todos.Select(t => mapper.Map<GetTodoDto>(t)).ToList();
+                context.Todos.Remove(todo);
+                await context.SaveChangesAsync();
+                response.data = context.Todos.Select(t => mapper.Map<GetTodoDto>(t)).ToList();
             }
             catch (Exception e)
             {
@@ -56,15 +54,16 @@ namespace ManagementTasks.Services.TodoService
         public async Task<ServiceResponse<List<GetTodoDto>>> GetAllTodos()
         {
             var response = new ServiceResponse<List<GetTodoDto>>();
-            var dbTodos = await context.Todos.ToListAsync();
-            response.data = dbTodos.Select(t => mapper.Map<GetTodoDto>(t)).ToList();
+            var todos = await context.Todos.ToListAsync();
+            response.data = todos.Select(t => mapper.Map<GetTodoDto>(t)).ToList();
             return response;
         }
 
         public async Task<ServiceResponse<GetTodoDto>> GetById(int id)
         {
             var response = new ServiceResponse<GetTodoDto>();
-            var todo = todos.FirstOrDefault(t => t.Id == id);
+
+            var todo = await context.Todos.FirstOrDefaultAsync(t => t.Id == id);
             response.data = mapper.Map<GetTodoDto>(todo);
             return response;
         }
@@ -74,12 +73,14 @@ namespace ManagementTasks.Services.TodoService
             var response = new ServiceResponse<GetTodoDto>();
             try
             {
-                var todo = todos.FirstOrDefault(t => t.Id == updateTodo.Id);
+                var todo = await context.Todos.FirstOrDefaultAsync(t => t.Id == updateTodo.Id);
                 if (todo is null)
                 {
                     throw new Exception($"todo with id '{updateTodo.Id}' not found");
                 }
                 mapper.Map(updateTodo, todo);
+                await context.SaveChangesAsync();
+
                 response.data = mapper.Map<GetTodoDto>(todo);
             }
             catch (Exception e)
