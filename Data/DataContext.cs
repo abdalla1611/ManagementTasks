@@ -13,7 +13,7 @@ namespace ManagementTasks.Data
         }
 
         public DbSet<Todo> Todos => Set<Todo>();
-
+        public DbSet<User> Users => Set<User>();
 
     }
 }
