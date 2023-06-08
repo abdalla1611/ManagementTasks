@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,10 +26,16 @@ namespace ManagementTasks.Controllers
         {
             return Ok(await this._TodoService.GetAllTodos());
         }
-        [HttpGet("{Id}")]
-        public async Task<ActionResult<ServiceResponse<GetTodoDto>>> GetSingle(int Id)
+        [HttpGet("Search")]
+        public async Task<ActionResult<ServiceResponse<List<GetTodoDto>>>> GetByKeyword(string keyword)
         {
-            return Ok(await this._TodoService.GetById(Id));
+            return Ok(await this._TodoService.GetByKeyword(keyword));
+        }
+
+        [HttpGet("Filter")]
+        public async Task<ActionResult<ServiceResponse<List<GetTodoDto>>>> FilterByDate(DateTime date)
+        {
+            return Ok(await this._TodoService.FilterByDate(date));
         }
 
         [HttpPost("")]

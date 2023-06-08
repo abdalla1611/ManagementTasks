@@ -12,6 +12,9 @@ namespace ManagementTasks.Models
         public string Title { get; set; } = "task title";
         public string description { get; set; } = "task description";
         public DateTime DueDate { get; set; } = new DateTime(1998, 11, 16);
+
+        public User? user { get; set; }
+
         public Todo()
         {
 
