@@ -48,6 +48,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
 
     });
 
+builder.Services.AddCors(op => op.AddPolicy(name: "ngOrigin",
+    policy =>
+    {
+        policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
+    }));
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
@@ -59,7 +65,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("ngOrigin");
+// app.UseHttpsRedirection();
 
 app.UseAuthentication();
 

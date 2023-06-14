@@ -11,9 +11,9 @@ namespace ManagementTasks.Services.TodoService
         Task<ServiceResponse<List<GetTodoDto>>> GetAllTodos();
         Task<ServiceResponse<List<GetTodoDto>>> FilterByDate(DateTime date);
         Task<ServiceResponse<List<GetTodoDto>>> GetByKeyword(string keyword);
-        Task<ServiceResponse<List<GetTodoDto>>> AddTodo(addTodoDto newTodo);
-        Task<ServiceResponse<GetTodoDto>> UpdateTodo(UpdateTodoDto updateTodo);
-        Task<ServiceResponse<List<GetTodoDto>>> DeleteTodo(int id);
+        Task<ServiceResponse<object>> AddTodo(addTodoDto newTodo);
+        Task<ServiceResponse<object>> UpdateTodo(UpdateTodoDto updateTodo);
+        Task<ServiceResponse<object>> DeleteTodo(int id);
 
 
     }

@@ -21,26 +21,27 @@ namespace ManagementTasks.Services.TodoService
 
         }
 
-        public async Task<ServiceResponse<List<GetTodoDto>>> AddTodo(addTodoDto newTodo)
+        public async Task<ServiceResponse<object>> AddTodo(addTodoDto newTodo)
         {
-            var response = new ServiceResponse<List<GetTodoDto>>();
+            var response = new ServiceResponse<object>();
             var t = mapper.Map<Todo>(newTodo);
             var userId = GetUserId();
             t.user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
             context.Todos.Add(t);
             await context.SaveChangesAsync();
-            response.data = await context.Todos
-            .Where(t => t.user!.Id == userId)
-            .Select(t => mapper.Map<GetTodoDto>(t))
-            .ToListAsync();
+            // response.data = await context.Todos
+            // .Where(t => t.user!.Id == userId)
+            // .Select(t => mapper.Map<GetTodoDto>(t))
+            // .ToListAsync();
+            response.message = "added Successfully";
             return response;
         }
 
-        public async Task<ServiceResponse<List<GetTodoDto>>> DeleteTodo(int id)
+        public async Task<ServiceResponse<object>> DeleteTodo(int id)
         {
             var userId = GetUserId();
-            var response = new ServiceResponse<List<GetTodoDto>>();
+            var response = new ServiceResponse<object>();
             try
             {
                 var todo = await context.Todos
@@ -52,10 +53,6 @@ namespace ManagementTasks.Services.TodoService
                 }
                 context.Todos.Remove(todo);
                 await context.SaveChangesAsync();
-                response.data = context.Todos
-                    .Where(t => t.user!.Id == userId)
-                    .Select(t => mapper.Map<GetTodoDto>(t))
-                    .ToList();
 
             }
             catch (Exception e)
@@ -63,6 +60,7 @@ namespace ManagementTasks.Services.TodoService
                 response.success = false;
                 response.message = e.Message;
             }
+            response.message = $"todo with id '{id}' Deleted Successfully";
             return response;
         }
 
@@ -102,9 +100,9 @@ namespace ManagementTasks.Services.TodoService
             return response;
         }
 
-        public async Task<ServiceResponse<GetTodoDto>> UpdateTodo(UpdateTodoDto updateTodo)
+        public async Task<ServiceResponse<object>> UpdateTodo(UpdateTodoDto updateTodo)
         {
-            var response = new ServiceResponse<GetTodoDto>();
+            var response = new ServiceResponse<object>();
             try
             {
                 var todo = await context.Todos
@@ -117,7 +115,7 @@ namespace ManagementTasks.Services.TodoService
                 mapper.Map(updateTodo, todo);
                 await context.SaveChangesAsync();
 
-                response.data = mapper.Map<GetTodoDto>(todo);
+                response.message = $"todo with id {updateTodo.Id} updated successfully";
             }
             catch (Exception e)
             {

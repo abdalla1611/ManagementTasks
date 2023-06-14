@@ -21,7 +21,7 @@ namespace ManagementTasks.Controllers
 
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet()]
         public async Task<ActionResult<ServiceResponse<List<GetTodoDto>>>> Get()
         {
             return Ok(await this._TodoService.GetAllTodos());
@@ -39,13 +39,13 @@ namespace ManagementTasks.Controllers
         }
 
         [HttpPost("")]
-        public async Task<ActionResult<ServiceResponse<List<GetTodoDto>>>> AddTodo(addTodoDto newTodo)
+        public async Task<ActionResult<ServiceResponse<object>>> AddTodo(addTodoDto newTodo)
         {
             return Ok(await this._TodoService.AddTodo(newTodo));
         }
 
         [HttpPut("")]
-        public async Task<ActionResult<ServiceResponse<GetTodoDto>>> UpdateTodo(UpdateTodoDto updateTodo)
+        public async Task<ActionResult<ServiceResponse<object>>> UpdateTodo(UpdateTodoDto updateTodo)
         {
             var response = await this._TodoService.UpdateTodo(updateTodo);
             if (response.success)
@@ -57,7 +57,7 @@ namespace ManagementTasks.Controllers
         }
 
         [HttpDelete("{Id}")]
-        public async Task<ActionResult<ServiceResponse<GetTodoDto>>> DeleteTodo(int Id)
+        public async Task<ActionResult<ServiceResponse<object>>> DeleteTodo(int Id)
         {
             var response = await this._TodoService.DeleteTodo(Id);
             if (response.success)

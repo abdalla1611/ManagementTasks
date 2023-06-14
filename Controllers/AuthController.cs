@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ManagementTasks.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
 
     public class AuthController : ControllerBase
     {
@@ -38,7 +38,7 @@ namespace ManagementTasks.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<ServiceResponse<int>>> Login(UserLoginDto userRequest)
+        public async Task<ActionResult<ServiceResponse<string>>> Login(UserLoginDto userRequest)
         {
             var response = await _repo.Login(
                 userRequest.Name,

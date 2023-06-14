@@ -13,8 +13,6 @@ namespace ManagementTasks
             CreateMap<addTodoDto, Todo>();
             CreateMap<UpdateTodoDto, Todo>();
             CreateMap<Todo, UpdateTodoDto>();
-
-
         }
     }
 }
